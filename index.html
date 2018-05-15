@@ -1,0 +1,51 @@
+<html>
+	<head>
+		<script>
+			function stringToRGB(string) {
+				const ctx = document.createElement('canvas').getContext('2d')
+				ctx.fillStyle = string
+				ctx.fillRect(0, 0, 1, 1)
+				const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data
+				return [r, g, b]
+			}
+
+			function getLuminance(rgb) {
+				const [R, G, B] = rgb
+				return ( 0.299*R + 0.587*G + 0.114*B )
+			}
+		</script>
+	</head>
+	<body>
+		<h1></h1>
+		<script>
+			'use strict'
+			const hash = location.hash
+			const h1 = document.body.querySelector('h1')
+			let value
+			if (
+				hash.length === 7 &&
+				parseInt(hash.slice(1,3), 16) != NaN &&
+				parseInt(hash.slice(3,5), 16) != NaN &&
+				parseInt(hash.slice(5), 16) != NaN
+			) {
+				value = location.hash
+			} else {
+				value = location.hash.slice(1)
+			}
+			document.body.style.background = value
+
+			const luminance = getLuminance(stringToRGB(value))
+			
+			h1.innerHTML = value
+			h1.style.display = 'block'
+			h1.style.fontSize = '72px'
+			h1.style.fontFamily = 'sans-serif'
+			h1.style.textTransform = 'capitalize'
+			h1.style.textAlign = 'center'
+			h1.style.margin = 'calc(25% - 72px)'
+			h1.style.color = (luminance > 186)
+				? 'rgba(0, 0, 0, 0.5)'
+				: 'rgba(255, 255, 255, 0.5)'
+		</script>
+	</body>
+</html>
